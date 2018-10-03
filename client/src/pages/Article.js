@@ -2,18 +2,17 @@ import React, { Component } from "react";
 
 import API from "../../utils/API";
 
-import { Col, Row, Container } from "../../components/Grid";
-import { List, ListItem } from "../../components/List";
-import { SearchForm } from "../../components/Search";
+import { Col, Row, Container } from "../Grid";
+import { List, ListItem } from "../components/List";
+import SearchForm from "../components/Search";
+import ResultList from "../components/ResultList";
+import Header from "../components/Header";
 
 class Articles extends Component {
   state = {
     articles: [],
-    title: "",
-    notes: "",
-    datePub: "",
-    topic: "",
-    saved: "",
+    saved: [],
+    topicSearch: ""
   };
 
   componentDidMount() {
@@ -23,7 +22,7 @@ class Articles extends Component {
   loadArticles = () => {
     API.getArticle()
       .then(res =>
-        this.setState({ articles: res.data, title: "", author: "", notes: "", datePub: "" })
+        this.setState({ saved: res.data })
       )
       .catch(err => console.log(err));
   };
@@ -43,49 +42,68 @@ class Articles extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    this.searchTopics(this.state.search);
+    this.searchTopics(this.state.topicSearch);
   };
 
   searchTopics = query => {
     API.search(query)
-      .then(res => this.setState({ result: res.data }))
+      .then(res => this.setState({ articles: res.data }))
       .catch(err => console.log(err));
   };
-  };
+
 
   render() {
     return (
-      <Header />
-              <Search
-                value={this.state.search}
-                handleInputChange={this.handleInputChange}
-                handleFormSubmit={this.handleFormSubmit}
-                />
-            <Results />
-          
-              <h1>Saved Articles</h1>
-            </Jumbotron>
-            {this.state.articles.length ? (
-              <List>
-                {this.state.articles.map(book => (
-                  <ListItem key={book._id}>
-                    <Link to={"/articles/" + book._id}>
-                      <strong>
-                        {book.title} by {book.author}
-                      </strong>
+      <div>
+        <Header />
+        <SearchForm>
+          value={this.state.search}
+          handleInputChange={this.handleInputChange}
+          handleFormSubmit={this.handleFormSubmit}
+        </SearchForm>
+
+        <Col size="xs-12">
+          {!this.state.articles.length ? (
+            <h1 className="text-center">No Articles Found</h1>
+          ) : (
+              <ResultList>
+                {this.state.articles.map(article => {
+                  return (
+                    <Results
+                      key={article.title}
+                      title={article.title}
+                      url={article.url}
+                      datePub={article.datePub}
+                    />
+                  );
+                })}
+              </ResultList>
+            )}
+        </Col>
+        <h1>Saved Articles</h1>
+        <div>
+          {this.state.articles.length ? (
+            <List>
+              {this.state.articles.map(article => (
+                <ListItem key={article._id}>
+                  <Link to={article.url >
+                    <strong>
+                      {article.title}
+                    </strong>
                     </Link>
-                    <DeleteBtn onClick={() => this.deleteBook(book._id)} />
-                  </ListItem>
-                ))}
-              </List>
-            ) : (
+                    <DeleteBtn onClick={() => this.deleteArticle(article._id)} />
+                </ListItem>
+              ))}
+            </List>
+          ) : (
               <h3>No Results to Display</h3>
             )}
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
+          };
+            </div>
+      </div>
+    )
+  };
+};
 
 
 export default Articles;
