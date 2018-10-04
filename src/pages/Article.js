@@ -1,18 +1,19 @@
 import React, { Component } from "react";
 
-import API from "../../utils/API";
-
-import { Col, Row, Container } from "../Grid";
-import { List, ListItem } from "../components/List";
+import API from "../utils/API";
+// import DeleteBtn from "../components/DeleteButton"
+// import { List, ListItem } from "../components/List";
 import SearchForm from "../components/Search";
 import ResultList from "../components/ResultList";
 import Header from "../components/Header";
+import Results from "../components/Results";
+import SaveBtn from "../components/SaveButton";
 
 class Articles extends Component {
   state = {
     articles: [],
     saved: [],
-    topicSearch: ""
+    topic: ""
   };
 
   componentDidMount() {
@@ -20,15 +21,22 @@ class Articles extends Component {
   }
 
   loadArticles = () => {
-    API.getArticle()
+    API.getArticles()
       .then(res =>
         this.setState({ saved: res.data })
       )
       .catch(err => console.log(err));
   };
 
-  deleteArticle = id => {
+  deleteArticles = id => {
     API.deleteArticle(id)
+      .then(res => this.loadArticle())
+      .catch(err => console.log(err));
+  };
+
+  saveArticles = id => {
+    console.log("saving Article")
+    API.saveArticle(id)
       .then(res => this.loadArticle())
       .catch(err => console.log(err));
   };
@@ -42,11 +50,12 @@ class Articles extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    this.searchTopics(this.state.topicSearch);
+    this.searchTopics(this.state.topic);
   };
 
   searchTopics = query => {
-    API.search(query)
+    
+    API.search(this.state.topic)
       .then(res => this.setState({ articles: res.data }))
       .catch(err => console.log(err));
   };
@@ -62,36 +71,41 @@ class Articles extends Component {
           handleFormSubmit={this.handleFormSubmit}
         </SearchForm>
 
-        <Col size="xs-12">
+        <div>
           {!this.state.articles.length ? (
             <h1 className="text-center">No Articles Found</h1>
           ) : (
               <ResultList>
                 {this.state.articles.map(article => {
                   return (
+                    <div>
                     <Results
                       key={article.title}
                       title={article.title}
                       url={article.url}
                       datePub={article.datePub}
                     />
+                    <SaveBtn onClick={() => this.saveArticles(article._id)} />
+                  
+                  </div>
                   );
                 })}
               </ResultList>
             )}
-        </Col>
+        </div>
+        {/* <div>
         <h1>Saved Articles</h1>
         <div>
           {this.state.articles.length ? (
             <List>
               {this.state.articles.map(article => (
                 <ListItem key={article._id}>
-                  <Link to={article.url >
+                  <Link to={article.url} >
                     <strong>
                       {article.title}
                     </strong>
                     </Link>
-                    <DeleteBtn onClick={() => this.deleteArticle(article._id)} />
+                    <DeleteBtn onClick={() => this.deleteArticles(article._id)} />
                 </ListItem>
               ))}
             </List>
@@ -99,10 +113,10 @@ class Articles extends Component {
               <h3>No Results to Display</h3>
             )}
           };
-            </div>
-      </div>
-    )
-  };
+            </div> */}
+      {/* </div> */}
+    )</div>
+  )}
 };
 
 

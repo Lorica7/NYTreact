@@ -11,14 +11,12 @@ export default {
     return axios.get("/api/articles");
   },
   
-  saveArticles: function(ArticleData) {
-    return axios.post("/api/articles", ArticleData);
+  saveArticles: function(articleData) {
+    return axios.post("/api/articles", articleData);
   },
   deleteArticles: function(id) {
     return axios.delete("/api/articles/" + id);
   },
-  // Saves a book to the database
-  saveArticles: function(bookData) {
-    return axios.post("/api/articles", ArticleData);
+ 
   }
-};
+;
