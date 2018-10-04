@@ -13,9 +13,9 @@ router
   .put(articlesController.update)
   .delete(articlesController.remove);
 
-  router.get("/api/articles", (req, res) => {
+  router.get("/articles", (req, res) => {
     axios
-      .get("https://api.nytimes.com/svc/search/v2/articlesearch.json?", { params: req.query })
+      .get("https://api.nytimes.com/svc/search/v2/articlesearch.json?", { params: req.query }, { params: req.APIKEY })
       .then(({ data: { results } }) => res.json(results))
       .catch(err => res.status(422).json(err));
   });

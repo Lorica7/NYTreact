@@ -1,6 +1,6 @@
 import axios from "axios";
 const BASEURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json?";
-const APIKEY = "b9f91d369ff59547cd47b931d8cbc56b:0:74623931";
+const APIKEY = "f3e1b0323f464751a8bf08e2474e3a4d";
 
 export default {
   search: function(query) {
@@ -8,14 +8,14 @@ export default {
   },
   
   getArticles: function() {
-    return axios.get("/api/articles");
+    return axios.get("/");
   },
   
   saveArticles: function(articleData) {
-    return axios.post("/api/articles", articleData);
+    return axios.post("/", articleData);
   },
   deleteArticles: function(id) {
-    return axios.delete("/api/articles/" + id);
+    return axios.delete("/" + id);
   },
  
   }

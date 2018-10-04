@@ -13,7 +13,9 @@ class Articles extends Component {
   state = {
     articles: [],
     saved: [],
-    topic: ""
+    topic: "",
+    query1: "",
+    query2: ""
   };
 
   componentDidMount() {
@@ -55,7 +57,7 @@ class Articles extends Component {
 
   searchTopics = query => {
     
-    API.search(this.state.topic)
+    API.search(this.state.query)
       .then(res => this.setState({ articles: res.data }))
       .catch(err => console.log(err));
   };
@@ -66,17 +68,17 @@ class Articles extends Component {
       <div>
         <Header />
         <SearchForm>
-          value={this.state.search}
+          value={this.state.query}
           handleInputChange={this.handleInputChange}
           handleFormSubmit={this.handleFormSubmit}
         </SearchForm>
 
         <div>
           {!this.state.articles.length ? (
-            <h1 className="text-center">No Articles Found</h1>
-          ) : (
+            <h1 className="text-center">No Articles Found</h1>)
+         : (
               <ResultList>
-                {this.state.articles.map(article => {
+                {this.state.articles.map(article=> {
                   return (
                     <div>
                     <Results
@@ -86,9 +88,8 @@ class Articles extends Component {
                       datePub={article.datePub}
                     />
                     <SaveBtn onClick={() => this.saveArticles(article._id)} />
-                  
                   </div>
-                  );
+                  )
                 })}
               </ResultList>
             )}

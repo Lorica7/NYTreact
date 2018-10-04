@@ -9,7 +9,7 @@ const SearchForm = props => (
                     <label htmlFor="search">Search:</label>
                     <input
                         onChange={props.handleInputChange}
-                        value={props.value}
+                        value={props.query}
                         name="search"
                         type="text"
                         className="form-control form-control-lg"
@@ -19,7 +19,7 @@ const SearchForm = props => (
                     <br />
                     <input
                         onChange={props.handleInputChange}
-                        value={props.value}
+                        value={props.query1}
                         name="search"
                         type="text"
                         className="form-control form-control-lg"
@@ -28,7 +28,7 @@ const SearchForm = props => (
                     />
                     <input
                         onChange={props.handleInputChange}
-                        value={props.value}
+                        value={props.query2}
                         name="search"
                         type="text"
                         className="form-control form-control-lg"
